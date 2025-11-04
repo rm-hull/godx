@@ -51,3 +51,16 @@ func TestUserInfo(t *testing.T) {
 	// Just check if the "Groups:" string is present, indicating the function attempted to get groups.
 	assert.Contains(t, output, "Groups:", "UserInfo() should log group information")
 }
+
+func TestEnvironmentVarsStrippingANSI(t *testing.T) {
+	ansiValue := "\x1b[31mred\x1b[0mtext"
+	_ = os.Setenv("TEST_ANSI_VAR", ansiValue)
+	defer func() {
+		_ = os.Unsetenv("TEST_ANSI_VAR")
+	}()
+
+	output := captureLog(EnvironmentVars)
+
+	assert.Contains(t, output, "TEST_ANSI_VAR: redtext", "EnvironmentVars() should strip ANSI codes")
+	assert.NotContains(t, output, ansiValue, "EnvironmentVars() should not contain raw ANSI codes")
+}

@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/acarl005/stripansi"
 	"github.com/earthboundkid/versioninfo/v2"
 )
 
@@ -33,7 +34,7 @@ func EnvironmentVars() {
 		if sensitiveRegex.MatchString(kv[0]) {
 			log.Printf("  %s: ********", kv[0])
 		} else {
-			log.Printf("  %s: %s", kv[0], kv[1])
+			log.Printf("  %s: %s", kv[0], stripansi.Strip(kv[1]))
 		}
 	}
 }
