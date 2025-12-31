@@ -3,6 +3,7 @@ package godx
 import (
 	"bytes"
 	"log"
+	"log/slog"
 	"os"
 	"testing"
 
@@ -63,4 +64,19 @@ func TestEnvironmentVarsStrippingANSI(t *testing.T) {
 
 	assert.Contains(t, output, "TEST_ANSI_VAR: redtext", "EnvironmentVars() should strip ANSI codes")
 	assert.NotContains(t, output, ansiValue, "EnvironmentVars() should not contain raw ANSI codes")
+}
+
+func TestDiagnostics(t *testing.T) {
+	var buf bytes.Buffer
+	logger := slog.New(slog.NewTextHandler(&buf, nil))
+
+	Diagnostics(logger)
+
+	logOutput := buf.String()
+	assert.Contains(t, logOutput, "Diagnostics", "Diagnostics() should log diagnostics information")
+	assert.Contains(t, logOutput, "git-version=", "Diagnostics() should log git version")
+	assert.Contains(t, logOutput, "pid=", "Diagnostics() should log PID")
+	assert.Contains(t, logOutput, "user=", "Diagnostics() should log user information")
+	assert.Contains(t, logOutput, "groups=", "Diagnostics() should log group information")
+	assert.Contains(t, logOutput, "environment=", "Diagnostics() should log environment variables")
 }
