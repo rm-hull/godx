@@ -79,7 +79,7 @@ func groups() ([]string, error) {
 }
 
 func env() map[string]string {
-	sensitiveRegex := regexp.MustCompile(`(?i)(PASSWORD|API_KEY|ACCESS_KEY|SECRET|TOKEN)`)
+	sensitiveRegex := regexp.MustCompile(`(?i)(PASSWORD|API_KEY|ACCESS_KEY|APP_KEY|SECRET|TOKEN)`)
 	environ := os.Environ()
 	envMap := make(map[string]string)
 	for _, entry := range environ {
